@@ -66,36 +66,53 @@ public class Automate {
     }
 
     public Map<String, Object> determinisation() {
+
+        if (this.isAFD())
+            return null;
+
         List<String> initialState = this.etatsInitiaux;
+        List<String> symboles = this.alphabet;
         List<List<String>> finalStates = new ArrayList<>();
         List<List<String>> states = new ArrayList<>();
-        List<List<String>> statesTransition = new ArrayList<>();
+        List<List<String>> statesPassed = new ArrayList<>();
+        List<List<String>> allTrasitionForAState = new ArrayList<>();
         List<List<List<String>>> transitionFonction = new ArrayList<>();
-        List<String> transitionState = new ArrayList<>();
+        List<String> transitionStateForASymbol = new ArrayList<>();
+        // List<String> state = this.etatsInitiaux;
 
         states.add(initialState);
 
-        for (String symbole : this.alphabet) {
-            int i = this.alphabet.indexOf(symbole);
-            for (List<String> state : states) {
+        int j = 0;
+        while (true) {
+            int size = states.size();
+            List<String> state = states.get(j);
+            for (String symbole : symboles) {
+                int i = symboles.indexOf(symbole);
                 for (String s : state) {
 
-                    int index = this.ensembleEtats.indexOf(s);
+                    if (!symboles.contains(s)) {
+                        int index = this.ensembleEtats.indexOf(s);
 
-                    List<String> fonctionTransEi = this.fonctionDeTransition.get(index).get(i);
+                        List<String> transitionFonctionEi = this.fonctionDeTransition.get(index).get(i);
 
-                    transitionState.addAll(fonctionTransEi);
+                        transitionStateForASymbol.addAll(transitionFonctionEi);
+                    }
                 }
+                allTrasitionForAState.add(transitionStateForASymbol);
 
-                statesTransition.add(transitionState);
-                if (!states.containsAll(transitionState))
-                    states.add(transitionState);
-
-                transitionState.clear();
+                if (!states.contains(transitionStateForASymbol) && !transitionStateForASymbol.isEmpty()) {
+                    states.add(transitionStateForASymbol);
+                }
+                transitionStateForASymbol = new ArrayList<>();
             }
-
-            transitionFonction.add(statesTransition);
-            statesTransition.clear();
+            statesPassed.add(state);
+            System.out.println("transition : " + allTrasitionForAState + " state : " + state);
+            transitionFonction.add(allTrasitionForAState);
+            allTrasitionForAState = new ArrayList<>();
+            if (statesPassed.size() == states.size())
+                break;
+            else
+                j++;
         }
 
         for (String s : this.etatsFinaux) {
@@ -113,7 +130,53 @@ public class Automate {
         AutomateDeterminise.put("etatsFinaux", finalStates);
         AutomateDeterminise.put("fonctionDeTransition", transitionFonction);
 
+        System.out.println("Fonction de transition de l'automate déterminisé !");
+        for (int i = 0; i < transitionFonction.size(); i++) {
+            for (int r = 0; r < transitionFonction.get(i).size(); r++) {
+                System.out.print(transitionFonction.get(i).get(r) + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println();
+        System.out.println();
+
         return AutomateDeterminise;
+    }
+
+    public String reconnaissanceMot(String mot) {
+        char[] arrayMot = mot.toCharArray();
+        List<String> listMot = new ArrayList<>();
+
+        for (char c : arrayMot) {
+            listMot.add(c + "");
+        }
+
+        String status = "pas reconnu";
+
+        List<String> stateInit = new ArrayList<>();
+        List<String> transitionStates = this.etatsInitiaux;
+
+        for (String c : listMot) {
+            if (!this.alphabet.contains(c))
+                return status;
+        }
+
+        do {
+            int i = this.alphabet.indexOf(listMot.remove(0));
+
+            int j = this.ensembleEtats.indexOf(transitionStates.get(0));
+
+            transitionStates = this.fonctionDeTransition.get(j).get(i);
+
+        } while (!transitionStates.isEmpty() && listMot.size() > 0);
+
+        if (this.etatsFinaux.containsAll(transitionStates) && listMot.size() == 0)
+            return "valide";
+        else if (transitionStates.isEmpty() && listMot.size() == 0)
+            return "reconnu";
+        else
+            return "non reconnu";
     }
 
     public Automate minimisation() {
