@@ -12,12 +12,15 @@ public class Main {
 
         autoEn.reconnaissanceMot(sentence);
 
-
         AutomateUnion autoU = new AutomateUnion(autoOpe.complement(), autoEn.complement());
 
         autoU.unionAutomate();
 
         autoU.reconnaissanceMot(sentence);
+
+        Automate automate = new Automate(); // Automate qui reconnait le langage des caractères
+        System.out.println(automate.reconnaissanceMot("/*c**/"));
+        System.out.println(automate.reconnaissanceMot("null"));
 
     }
 }

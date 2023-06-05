@@ -19,6 +19,147 @@ public class Automate {
         this.fonctionDeTransition = fonctionDeTransition;
     }
 
+    // Automate qui reconnait le langage des commentaires /*{c}**/
+    public Automate(){
+        List<String> alphabet = new ArrayList<>();
+        alphabet.add("*");
+        alphabet.add("/");
+        alphabet.add("c");
+        alphabet.add("%");
+        this.alphabet = alphabet;
+
+        List<String> ensembleEtats = new ArrayList<>();
+        ensembleEtats.add("0");
+        ensembleEtats.add("1");
+        ensembleEtats.add("2");
+        ensembleEtats.add("3");
+        ensembleEtats.add("4");
+        ensembleEtats.add("5");
+        ensembleEtats.add("6");
+        this.ensembleEtats = ensembleEtats;
+
+        List<String> etatsInitiaux = new ArrayList<>();
+        etatsInitiaux.add("0");
+        this.etatsInitiaux = etatsInitiaux;
+
+        List<String> etatsFinaux = new ArrayList<>();
+        etatsFinaux.add("6");
+        this.etatsFinaux = etatsFinaux;
+
+
+        List<List<List<String>>> fonction = new ArrayList<>();
+        List<List<String>> ligne;
+        List<String> transitions;
+
+        // 0
+        ligne = new ArrayList<>();
+        transitions = new ArrayList<>();
+        transitions.add("0"); // *
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // /
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("0"); // c
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("0"); // %
+        ligne.add(transitions);
+        fonction.add(ligne);
+        // 1
+        ligne = new ArrayList<>();
+        transitions = new ArrayList<>();
+        transitions.add("2"); // *
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("0"); // /
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("0"); // c
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("0"); // %
+        ligne.add(transitions);
+        fonction.add(ligne);
+        // 2
+        ligne = new ArrayList<>();
+        transitions = new ArrayList<>();
+        transitions.add("5"); // *
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // /
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // c
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("3"); // %
+        ligne.add(transitions);
+        fonction.add(ligne);
+        // 3
+        ligne = new ArrayList<>();
+        transitions = new ArrayList<>();
+        transitions.add("4"); // *
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // /
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // c
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("3"); // %
+        ligne.add(transitions);
+        fonction.add(ligne);
+        // 4
+        ligne = new ArrayList<>();
+        transitions = new ArrayList<>();
+        transitions.add("2"); // *
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // /
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // c
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // %
+        ligne.add(transitions);
+        fonction.add(ligne);
+        // 5
+        ligne = new ArrayList<>();
+        transitions = new ArrayList<>();
+        transitions.add("5"); // *
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("6"); // /
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // c
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("2"); // %
+        ligne.add(transitions);
+        fonction.add(ligne);
+        // 6
+        ligne = new ArrayList<>();
+        transitions = new ArrayList<>();
+        transitions.add("6"); // *
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("6"); // /
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("6"); // c
+        ligne.add(transitions);
+        transitions = new ArrayList<>();
+        transitions.add("6"); // %
+        ligne.add(transitions);
+        fonction.add(ligne);
+
+        this.fonctionDeTransition = fonction;
+    }
+
     public boolean isAFD() {
 
         if (etatsInitiaux.size() != 1)
@@ -324,4 +465,5 @@ public class Automate {
 
         return new Automate(alphabet, states, initialStates, finalStates, transtionTable);
     }
+
 }
